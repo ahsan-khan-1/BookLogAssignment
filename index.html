@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>📚 Book Tracker</h1>
+
+    <!-- Google Login -->
+    <button id="googleLogin">🔑 Sign in with Google</button>
+    <button id="googleLogout" style="display:none;">🚪 Sign Out</button>
+    
+    <!-- Biometric Authentication -->
+    <button id="biometricLogin">🔒 Use Biometric Authentication</button>
+
+    <h2>📖 Add a New Book</h2>
+    <input type="text" id="title" placeholder="Book Title">
+    <input type="text" id="author" placeholder="Author">
+    <input type="number" id="rating" placeholder="Rating (1-5)">
+    <select id="genre">
+        <option>Fiction</option>
+        <option>Non-Fiction</option>
+        <option>Fantasy</option>
+        <option>Science Fiction</option>
+        <option>Mystery</option>
+        <option>Biography</option>
+    </select>
+    <button id="addBook">➕ Add Book</button>
+
+    <h2>📚 Your Books</h2>
+    <ul id="bookList"></ul>
+
+    <!-- AI Chatbot -->
+    <h2>🤖 AI Chatbot</h2>
+    <input type="text" id="chatInput" placeholder="Ask something...">
+    <button id="askBot">💬 Ask AI</button>
+    <p id="chatResponse"></p>
+
+    <script src="firebase-config.js" type="module"></script>
+    <script src="script.js" type="module"></script>
+    <script src="ai-chatbot.js" type="module"></script>
+    <script src="biometric-auth.js" type="module"></script>
+</body>
+</html>
