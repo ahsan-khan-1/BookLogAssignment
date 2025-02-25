@@ -1,37 +1,44 @@
-import { db } from "./firebase-config.js";
-import { collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { auth, provider, db } from "./firebaseConfig.js";
+import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
+import { collection, getDocs, query, where } from "firebase/firestore";
 
-// Add Book
-document.getElementById("addBook").addEventListener("click", async () => {
-    const title = document.getElementById("title").value;
-    const author = document.getElementById("author").value;
-    const rating = document.getElementById("rating").value;
-    const genre = document.getElementById("genre").value;
+// Google Login
+document.getElementById("googleLogin").addEventListener("click", () => {
+    signInWithPopup(auth, provider).then(() => {
+        window.location.href = "app.html";
+    }).catch(error => {
+        console.error("Login failed:", error);
+    });
+});
 
-    if (title && author && rating) {
-        await addDoc(collection(db, "books"), { title, author, rating, genre });
-        loadBooks();
-    }
+// Logout
+document.getElementById("logout")?.addEventListener("click", () => {
+    signOut(auth).then(() => {
+        window.location.href = "index.html";
+    });
 });
 
 // Load Books
-async function loadBooks() {
+async function loadBooks(userId) {
     const bookList = document.getElementById("bookList");
     bookList.innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "books"));
+
+    const q = query(collection(db, "books"), where("userId", "==", userId));
+    const querySnapshot = await getDocs(q);
+
     querySnapshot.forEach((doc) => {
         const book = doc.data();
         const li = document.createElement("li");
-        li.innerHTML = `${book.title} by ${book.author} - ${book.rating}/5 [${book.genre}]
-            <button onclick="deleteBook('${doc.id}')">❌</button>`;
+        li.innerText = `${book.title} by ${book.author}`;
         bookList.appendChild(li);
     });
 }
 
-// Delete Book
-async function deleteBook(id) {
-    await deleteDoc(doc(db, "books", id));
-    loadBooks();
-}
-
-loadBooks();
+// Auto Redirect If Logged In
+onAuthStateChanged(auth, (user) => {
+    if (user && window.location.pathname.includes("index.html")) {
+        window.location.href = "app.html";
+    } else if (user && window.location.pathname.includes("app.html")) {
+        loadBooks(user.uid);
+    }
+});
