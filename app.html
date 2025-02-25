@@ -3,17 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Tracker</title>
+    <title>Book Log - App</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>📚 Your Book Collection</h1>
-    <button id="logout">🚪 Sign Out</button>
-
-    <h2>📚 Saved Books</h2>
-    <ul id="bookList"></ul>
-
-    <script src="firebaseConfig.js" type="module"></script>
-    <script src="script.js" type="module"></script>
+    <div class="container">
+        <h1>Your Book Log</h1>
+        <div id="booksContainer"></div>
+        <button id="logout">Logout</button>
+    </div>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

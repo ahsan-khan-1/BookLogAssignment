@@ -1,44 +1,71 @@
-import { auth, provider, db } from "./firebaseConfig.js";
-import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
+// script.js
+import { auth, provider } from "./firebaseConfig.js";
+import { signInWithPopup, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "firebase/auth";
 
-// Google Login
-document.getElementById("googleLogin")?.addEventListener("click", () => {
-    signInWithPopup(auth, provider).then(() => {
-        window.location.href = "app.html";
-    }).catch(error => {
-        console.error("Login failed:", error);
-    });
-});
+// Handle Google Sign-In
+document.addEventListener("DOMContentLoaded", () => {
+    const googleLoginButton = document.getElementById("googleLogin");
+    const emailForm = document.getElementById("emailForm");
+    const messageDisplay = document.getElementById("message");
 
-// Logout
-document.getElementById("logout")?.addEventListener("click", () => {
-    signOut(auth).then(() => {
-        window.location.href = "index.html";
-    });
-});
-
-// Load Books
-async function loadBooks(userId) {
-    const bookList = document.getElementById("bookList");
-    bookList.innerHTML = "";
-
-    const q = query(collection(db, "books"), where("userId", "==", userId));
-    const querySnapshot = await getDocs(q);
-
-    querySnapshot.forEach((doc) => {
-        const book = doc.data();
-        const li = document.createElement("li");
-        li.innerText = `${book.title} by ${book.author}`;
-        bookList.appendChild(li);
-    });
-}
-
-// Auto Redirect If Logged In
-onAuthStateChanged(auth, (user) => {
-    if (user && window.location.pathname.includes("index.html")) {
-        window.location.href = "app.html";
-    } else if (user && window.location.pathname.includes("app.html")) {
-        loadBooks(user.uid);
+    if (googleLoginButton) {
+        googleLoginButton.addEventListener("click", () => {
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    console.log("User signed in with Google:", result.user);
+                    window.location.href = "app.html"; // Redirect after login
+                })
+                .catch((error) => {
+                    console.error("Google Login failed:", error);
+                    messageDisplay.textContent = "Google Sign-In failed. Please try again.";
+                });
+        });
     }
+
+    // Handle Email Sign Up / Login
+    if (emailForm) {
+        emailForm.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Sign Up
+            createUserWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    console.log("User signed up with email:", userCredential.user);
+                    window.location.href = "app.html"; // Redirect after signup
+                })
+                .catch((error) => {
+                    // Try to sign in if the user already exists
+                    signInWithEmailAndPassword(auth, email, password)
+                        .then((userCredential) => {
+                            console.log("User signed in with email:", userCredential.user);
+                            window.location.href = "app.html"; // Redirect after login
+                        })
+                        .catch((error) => {
+                            console.error("Email login failed:", error);
+                            messageDisplay.textContent = error.message;
+                        });
+                });
+        });
+    }
+
+    // Auto Redirect If Logged In
+    onAuthStateChanged(auth, (user) => {
+        if (user && window.location.pathname.includes("index.html")) {
+            window.location.href = "app.html";
+        }
+    });
+});
+
+// Handle Logout
+document.getElementById("logout").addEventListener("click", () => {
+    signOut(auth)
+        .then(() => {
+            console.log("User signed out");
+            window.location.href = "index.html"; // Redirect to login page
+        })
+        .catch((error) => {
+            console.error("Sign out error:", error);
+        });
 });
