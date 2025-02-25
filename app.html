@@ -5,35 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Book Tracker</title>
     <link rel="stylesheet" href="style.css">
-    <script defer src="firebase-config.js"></script>
-    <script defer src="script.js"></script>
 </head>
 <body>
-    <header>
-        <h1>My Book Tracker</h1>
-        <button onclick="googleSignOut()">Logout</button>
-    </header>
-    
-    <main>
-        <h2>Add a Book</h2>
-        <input type="text" id="book-title" placeholder="Book Title">
-        <input type="text" id="book-author" placeholder="Author">
-        <input type="number" id="book-rating" placeholder="Rating (1-5)" min="1" max="5">
-        
-        <label for="genre">Genre:</label>
-        <select id="genre">
-            <option>Fiction</option>
-            <option>Non-Fiction</option>
-            <option>Fantasy</option>
-            <option>Science Fiction</option>
-            <option>Custom (Enter Below)</option>
-        </select>
-        <input type="text" id="custom-genre" placeholder="Custom Genre">
+    <h1>📚 Your Book Collection</h1>
+    <button id="logout">🚪 Sign Out</button>
 
-        <button onclick="addBook()">Add Book</button>
+    <h2>📚 Saved Books</h2>
+    <ul id="bookList"></ul>
 
-        <h2>Your Books</h2>
-        <ul id="book-list"></ul>
-    </main>
+    <script src="firebaseConfig.js" type="module"></script>
+    <script src="script.js" type="module"></script>
 </body>
 </html>

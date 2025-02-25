@@ -3,7 +3,7 @@ import { signInWithPopup, onAuthStateChanged, signOut } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
 
 // Google Login
-document.getElementById("googleLogin").addEventListener("click", () => {
+document.getElementById("googleLogin")?.addEventListener("click", () => {
     signInWithPopup(auth, provider).then(() => {
         window.location.href = "app.html";
     }).catch(error => {

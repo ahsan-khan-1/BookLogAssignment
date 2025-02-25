@@ -2,9 +2,9 @@ import { auth } from "./firebaseConfig.js";
 import { signInWithCustomToken } from "firebase/auth";
 
 // Simulating biometric login (Use real biometric API on mobile)
-document.getElementById("biometricLogin").addEventListener("click", async () => {
+document.getElementById("biometricLogin")?.addEventListener("click", async () => {
     try {
-        const biometricSuccess = confirm("Use Biometrics to Login?"); // Simulating Biometric API
+        const biometricSuccess = confirm("Use Biometrics to Login?");
         if (!biometricSuccess) return;
 
         // Ideally, get a secure token from the backend
